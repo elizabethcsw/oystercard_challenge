@@ -14,8 +14,15 @@ describe Oystercard do
   end
 
   it 'raises an error if balance exceeds 90' do
-    maximum_limit = described_class::MAXIMUM_LIMIT
-    subject.top_up(maximum_limit)
-    expect { subject.top_up(1) }.to raise_error('Max balance of £90 is exceeded')
+    max_lim = described_class::MAXIMUM_LIMIT
+    card = described_class.new
+    card.top_up(max_lim)
+    expect { card.top_up 1 }.to raise_error "Max balance £#{max_lim} exceeded"
+  end
+
+  it 'will reduce the balance by a specified amount' do
+    subject.top_up(20)
+    subject.deduct(5)
+    expect(subject.balance).to eq 15
   end
 end

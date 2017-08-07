@@ -15,6 +15,10 @@ class Oystercard
   end
 
   def max_error
-    raise 'Max balance of £90 is exceeded'
+    raise 'Max balance £90 exceeded'
+  end
+
+  def deduct(amount)
+    @balance -= amount
   end
 end
