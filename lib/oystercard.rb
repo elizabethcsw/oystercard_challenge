@@ -29,11 +29,12 @@ class Oystercard
 
   def in_journey?
     return 'not in use' if @journeys == []
-    return 'in use' if @journeys.last[:out] == "nil"
-    return 'not in use' if (@journeys.last[:in] == "nil" && @journeys.last[:out] == "nil") 
+    return 'in use' if touched_in && !touched_out
+    return 'not in use' if last_journey_complete
   end
 
   def touch_in(station)
+    raise "You cannot touch in twice" if @trip_no > 0 && (touched_in || !touched_out)
     @trip_no += 1
     raise "Insufficient funds to touch in, balance must be more than #{MIN_BAL}" if @balance < MIN_BAL
     # @in_use = true
@@ -42,6 +43,7 @@ class Oystercard
   end
 
   def touch_out(station)
+    raise "Please touch in first" if touched_out || !touched_in
     deduct(FARE_PER_TRIP)
     # @in_use = false
     puts "Card touched out. Remaining balance #{@balance}."
@@ -49,6 +51,18 @@ class Oystercard
   end
 
 private
+  def touched_in
+    @journeys.last[:in] != "nil"
+  end
+
+  def touched_out
+    @journeys.last[:out] != "nil"
+  end
+
+  def last_journey_complete
+    touched_in && touched_out
+  end
+
   def deduct(amount)
     @balance -= amount
   end

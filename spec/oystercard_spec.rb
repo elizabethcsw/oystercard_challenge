@@ -68,6 +68,7 @@ describe Oystercard do
   it 'can deduct the balance when touching out' do
     station1 = Station.new("Paddington")
     station2 = Station.new("Aldgate")
+    subject.top_up(5)
     subject.touch_in(station1)
     expect { subject.touch_out(station2) }.to change { subject.balance }.by(-Oystercard::FARE_PER_TRIP)
   end
