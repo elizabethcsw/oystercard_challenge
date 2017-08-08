@@ -27,7 +27,10 @@ describe Oystercard do
 
   it 'will reduce the balance by a specified amount' do
     subject.top_up(20)
-    subject.touch_out
+    station1 = Station.new("Paddington")
+    station2 = Station.new("Aldgate")
+    subject.touch_in(station1)
+    subject.touch_out(station2)
     expect(subject.balance).to eq 19
   end
 
@@ -49,8 +52,9 @@ describe Oystercard do
   it 'changes its status to not in use after touch out' do
     subject.top_up(5)
     station = Station.new("Paddington")
+    station2 = Station.new("Aldgate")
     subject.touch_in(station)
-    subject.touch_out
+    subject.touch_out(station2)
     expect(subject.in_journey?).to eq 'not in use'
   end
 
@@ -62,7 +66,10 @@ describe Oystercard do
   end
 
   it 'can deduct the balance when touching out' do
-    expect { subject.touch_out }.to change { subject.balance }.by(-Oystercard::FARE_PER_TRIP)
+    station1 = Station.new("Paddington")
+    station2 = Station.new("Aldgate")
+    subject.touch_in(station1)
+    expect { subject.touch_out(station2) }.to change { subject.balance }.by(-Oystercard::FARE_PER_TRIP)
   end
 
   let(:station) { double :station }
@@ -71,7 +78,16 @@ describe Oystercard do
     # station = Station.new("Paddington")
     allow(station).to receive(:name).and_return("Paddington")
     subject.touch_in(station)
-    expect(subject.entry_station).to eq(["Paddington"])
+    expect(subject.journeys).to eq([{in: "Paddington", out: "nil"}])
   end
-  
+
+  it 'records journeys' do
+    subject.top_up(5)
+    station1 = Station.new("Paddington")
+    station2 = Station.new("Aldgate")
+    subject.touch_in(station1)
+    subject.touch_out(station2)
+    expect(subject.journeys).to eq([{in: "Paddington", out: "Aldgate"}])
+  end
+
 end

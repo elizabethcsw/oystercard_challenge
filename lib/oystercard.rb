@@ -3,8 +3,8 @@ require_relative './station.rb'
 MIN_BAL = 1
 
 class Oystercard
-  attr_reader :balance
-  attr_accessor :entry_station
+  attr_reader :balance, :journeys
+  attr_accessor :entry_station, :trip_no
 
   MAXIMUM_LIMIT = 90
   # DEFAULT_STATUS = false
@@ -14,8 +14,8 @@ class Oystercard
     @balance = 0
     @maximum_limit = maximum_limit
     # @in_use = in_use
-    @entry_station = []
-
+    @journeys = []
+    @trip_no = 0
   end
 
   def top_up(amount)
@@ -28,22 +28,24 @@ class Oystercard
   end
 
   def in_journey?
-    return 'in use' if @entry_station != []
-    'not in use'
+    return 'not in use' if @journeys == []
+    return 'in use' if @journeys.last[:out] == "nil"
+    return 'not in use' if (@journeys.last[:in] == "nil" && @journeys.last[:out] == "nil") 
   end
 
   def touch_in(station)
+    @trip_no += 1
     raise "Insufficient funds to touch in, balance must be more than #{MIN_BAL}" if @balance < MIN_BAL
     # @in_use = true
     puts "Card touched in."
-    @entry_station << station.name
+    @journeys << {in: station.name, out: "nil"}
   end
 
-  def touch_out
+  def touch_out(station)
     deduct(FARE_PER_TRIP)
     # @in_use = false
     puts "Card touched out. Remaining balance #{@balance}."
-    @entry_station = []
+    @journeys[trip_no-1][:out] = station.name
   end
 
 private
