@@ -7,13 +7,11 @@ class Oystercard
   attr_accessor :entry_station, :trip_no
 
   MAXIMUM_LIMIT = 90
-  # DEFAULT_STATUS = false
   FARE_PER_TRIP = 1
 
   def initialize(maximum_limit = MAXIMUM_LIMIT)
     @balance = 0
     @maximum_limit = maximum_limit
-    # @in_use = in_use
     @journeys = []
     @trip_no = 0
   end
@@ -36,10 +34,9 @@ class Oystercard
   def touch_in(station)
     raise "You cannot touch in twice" if @trip_no > 0 && (touched_in || !touched_out)
     @trip_no += 1
-    raise "Insufficient funds to touch in, balance must be more than #{MIN_BAL}" if @balance < MIN_BAL
-    # @in_use = true
+    raise "Insufficient funds, min requried balance is #{MIN_BAL}" if @balance < MIN_BAL
     puts "Card touched in."
-    @journeys << {in: station.name, out: "nil"}
+    @journeys << { in: station.name, in_zone: station.zone, out: "nil", out_zone: "nil" }
   end
 
   def touch_out(station)
@@ -47,7 +44,8 @@ class Oystercard
     deduct(FARE_PER_TRIP)
     # @in_use = false
     puts "Card touched out. Remaining balance #{@balance}."
-    @journeys[trip_no-1][:out] = station.name
+    @journeys[trip_no - 1][:out] = station.name
+    @journeys[trip_no - 1][:out_zone] = station.zone
   end
 
 private

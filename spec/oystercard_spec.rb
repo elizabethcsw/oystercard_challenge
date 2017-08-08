@@ -27,8 +27,8 @@ describe Oystercard do
 
   it 'will reduce the balance by a specified amount' do
     subject.top_up(20)
-    station1 = Station.new("Paddington")
-    station2 = Station.new("Aldgate")
+    station1 = Station.new("Paddington", 1)
+    station2 = Station.new("Aldgate", 1)
     subject.touch_in(station1)
     subject.touch_out(station2)
     expect(subject.balance).to eq 19
@@ -44,15 +44,15 @@ describe Oystercard do
 
   it 'changes its status to in use after touch in' do
     subject.top_up(2)
-    station = Station.new("Paddington")
+    station = Station.new("Paddington", 1)
     subject.touch_in(station)
     expect(subject.in_journey?).to eq 'in use'
   end
 
   it 'changes its status to not in use after touch out' do
     subject.top_up(5)
-    station = Station.new("Paddington")
-    station2 = Station.new("Aldgate")
+    station = Station.new("Paddington", 1)
+    station2 = Station.new("Aldgate", 1)
     subject.touch_in(station)
     subject.touch_out(station2)
     expect(subject.in_journey?).to eq 'not in use'
@@ -61,13 +61,13 @@ describe Oystercard do
   it 'cannot be touched in without a minimun balance of £1' do
     # min_bal = described_class::MIN_BAL
     subject.top_up(0.5)
-    station = Station.new("Paddington")
-    expect { subject.touch_in(station) }.to raise_error "Insufficient funds to touch in, balance must be more than #{MIN_BAL}"
+    station = Station.new("Paddington", 1)
+    expect { subject.touch_in(station) }.to raise_error "Insufficient funds, min requried balance is #{MIN_BAL}"
   end
 
   it 'can deduct the balance when touching out' do
-    station1 = Station.new("Paddington")
-    station2 = Station.new("Aldgate")
+    station1 = Station.new("Paddington", 1)
+    station2 = Station.new("Aldgate", 1)
     subject.top_up(5)
     subject.touch_in(station1)
     expect { subject.touch_out(station2) }.to change { subject.balance }.by(-Oystercard::FARE_PER_TRIP)
@@ -78,17 +78,18 @@ describe Oystercard do
     subject.top_up(5)
     # station = Station.new("Paddington")
     allow(station).to receive(:name).and_return("Paddington")
+    allow(station).to receive(:zone).and_return(1)
     subject.touch_in(station)
-    expect(subject.journeys).to eq([{in: "Paddington", out: "nil"}])
+    expect(subject.journeys).to eq([{ in: "Paddington", in_zone: 1, out: "nil", out_zone: "nil" }])
   end
 
   it 'records journeys' do
     subject.top_up(5)
-    station1 = Station.new("Paddington")
-    station2 = Station.new("Aldgate")
+    station1 = Station.new("Paddington", 1)
+    station2 = Station.new("Aldgate", 1)
     subject.touch_in(station1)
     subject.touch_out(station2)
-    expect(subject.journeys).to eq([{in: "Paddington", out: "Aldgate"}])
+    expect(subject.journeys).to eq([{ in: "Paddington", in_zone: 1, out: "Aldgate", out_zone: 1 }])
   end
 
 end
