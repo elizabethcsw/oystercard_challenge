@@ -1,9 +1,11 @@
 require 'oystercard'
 
 describe Oystercard do
+
   it 'initializes with a zero balance' do
     expect(described_class.new.balance).to eq 0
   end
+
   it 'can top up the balance' do
     subject.top_up(20)
     expect(subject.balance).to eq 20
@@ -35,6 +37,7 @@ describe Oystercard do
   end
 
   it 'changes its status to in use after touch in' do
+    subject.top_up(2)
     subject.touch_in
     expect(subject.in_journey?).to eq 'in use'
   end
@@ -43,4 +46,11 @@ describe Oystercard do
     subject.touch_out
     expect(subject.in_journey?).to eq 'not in use'
   end
+
+  it 'cannot be touched in without a minimun balance of £1' do
+    # min_bal = described_class::MIN_BAL
+    subject.top_up(0.5)
+    expect { subject.touch_in }.to raise_error "Insufficient funds to touch in, balance must be more than #{MIN_BAL}"
+  end
+  
 end
