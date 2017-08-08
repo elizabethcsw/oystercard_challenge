@@ -1,7 +1,7 @@
 {
   "RSpec": {
     "coverage": {
-      "/Users/oliviafrost/Desktop/Makers/FullCourse/week2/oystercard2/oystercard_challenge/spec/oystercard_spec.rb": [
+      "/Users/elizabethchan/Desktop/Makers Academy/week2/oystercard_challenge/spec/oystercard_spec.rb": [
         1,
         1,
         null,
@@ -80,7 +80,7 @@
         null,
         null
       ],
-      "/Users/oliviafrost/Desktop/Makers/FullCourse/week2/oystercard2/oystercard_challenge/lib/oystercard.rb": [
+      "/Users/elizabethchan/Desktop/Makers Academy/week2/oystercard_challenge/lib/oystercard.rb": [
         1,
         null,
         1,
@@ -135,7 +135,7 @@
         null,
         null
       ],
-      "/Users/oliviafrost/Desktop/Makers/FullCourse/week2/oystercard2/oystercard_challenge/lib/station.rb": [
+      "/Users/elizabethchan/Desktop/Makers Academy/week2/oystercard_challenge/lib/station.rb": [
         1,
         null,
         1,
@@ -147,6 +147,6 @@
         null
       ]
     },
-    "timestamp": 1502204161
+    "timestamp": 1502205097
   }
 }
