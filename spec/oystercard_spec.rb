@@ -1,6 +1,9 @@
 require 'oystercard'
+require 'station'
 
 describe Oystercard do
+
+  # let(:station) { double :station }
 
   it 'initializes with a zero balance' do
     expect(described_class.new.balance).to eq 0
@@ -38,11 +41,15 @@ describe Oystercard do
 
   it 'changes its status to in use after touch in' do
     subject.top_up(2)
-    subject.touch_in
+    station = Station.new("Paddington")
+    subject.touch_in(station)
     expect(subject.in_journey?).to eq 'in use'
   end
 
   it 'changes its status to not in use after touch out' do
+    subject.top_up(5)
+    station = Station.new("Paddington")
+    subject.touch_in(station)
     subject.touch_out
     expect(subject.in_journey?).to eq 'not in use'
   end
@@ -50,11 +57,21 @@ describe Oystercard do
   it 'cannot be touched in without a minimun balance of £1' do
     # min_bal = described_class::MIN_BAL
     subject.top_up(0.5)
-    expect { subject.touch_in }.to raise_error "Insufficient funds to touch in, balance must be more than #{MIN_BAL}"
+    station = Station.new("Paddington")
+    expect { subject.touch_in(station) }.to raise_error "Insufficient funds to touch in, balance must be more than #{MIN_BAL}"
   end
 
   it 'can deduct the balance when touching out' do
-    expect { subject.touch_out }.to change { subject.balance }.by (-1)
+    expect { subject.touch_out }.to change { subject.balance }.by -1
   end
 
+  let(:station) { double :station }
+  it 'can record touch in station' do
+    subject.top_up(5)
+    # station = Station.new("Paddington")
+    allow(station).to receive(:name).and_return("Paddington")
+    subject.touch_in(station)
+    expect(subject.entry_station).to eq(["Paddington"])
+  end
+  
 end
