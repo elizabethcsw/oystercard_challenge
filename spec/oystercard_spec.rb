@@ -31,16 +31,16 @@ describe Oystercard do
   end
 
   it 'has a default status of not in use' do
-    expect(subject.in_journey?).to eq "not in use"
+    expect(subject.in_journey?).to eq 'not in use'
   end
 
   it 'changes its status to in use after touch in' do
     subject.touch_in
-    expect(subject.in_journey?).to eq "in use"
+    expect(subject.in_journey?).to eq 'in use'
   end
 
   it 'changes its status to not in use after touch out' do
     subject.touch_out
-    expect(subject.in_journey?).to eq "not in use"
+    expect(subject.in_journey?).to eq 'not in use'
   end
 end

@@ -26,8 +26,8 @@ class Oystercard
   end
 
   def in_journey?
-    return "not in use" unless @in_use
-    "in use"
+    return 'not in use' unless @in_use
+    'in use'
   end
 
   def touch_in
