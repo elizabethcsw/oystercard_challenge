@@ -25,4 +25,22 @@ describe Oystercard do
     subject.deduct(5)
     expect(subject.balance).to eq 15
   end
+
+  it 'is in journey' do
+    expect(subject).to respond_to(:in_journey?)
+  end
+
+  it 'has a default status of not in use' do
+    expect(subject.in_journey?).to eq "not in use"
+  end
+
+  it 'changes its status to in use after touch in' do
+    subject.touch_in
+    expect(subject.in_journey?).to eq "in use"
+  end
+
+  it 'changes its status to not in use after touch out' do
+    subject.touch_out
+    expect(subject.in_journey?).to eq "not in use"
+  end
 end
