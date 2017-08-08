@@ -62,7 +62,7 @@ describe Oystercard do
   end
 
   it 'can deduct the balance when touching out' do
-    expect { subject.touch_out }.to change { subject.balance }.by -1
+    expect { subject.touch_out }.to change { subject.balance }.by(-Oystercard::FARE_PER_TRIP)
   end
 
   let(:station) { double :station }
