@@ -24,8 +24,8 @@ describe Oystercard do
 
   it 'will reduce the balance by a specified amount' do
     subject.top_up(20)
-    subject.deduct(5)
-    expect(subject.balance).to eq 15
+    subject.touch_out
+    expect(subject.balance).to eq 19
   end
 
   it 'is in journey' do
@@ -52,5 +52,9 @@ describe Oystercard do
     subject.top_up(0.5)
     expect { subject.touch_in }.to raise_error "Insufficient funds to touch in, balance must be more than #{MIN_BAL}"
   end
-  
+
+  it 'can deduct the balance when touching out' do
+    expect { subject.touch_out }.to change { subject.balance }.by (-1)
+  end
+
 end
