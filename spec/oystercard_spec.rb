@@ -22,7 +22,7 @@ describe Oystercard do
     max_lim = described_class::MAXIMUM_LIMIT
     card = described_class.new
     card.top_up(max_lim)
-    expect { card.top_up 1 }.to raise_error "Max balance £#{max_lim} exceeded"
+    expect { card.top_up 100 }.to raise_error "Max balance £#{max_lim} exceeded"
   end
 
   it 'will reduce the balance by a specified amount' do
@@ -31,7 +31,7 @@ describe Oystercard do
     station2 = Station.new("Aldgate", 1)
     subject.touch_in(station1)
     subject.touch_out(station2)
-    expect(subject.balance).to eq 19
+    expect(subject.balance).to eq 18
   end
 
   it 'is in journey' do
@@ -70,7 +70,7 @@ describe Oystercard do
     station2 = Station.new("Aldgate", 1)
     subject.top_up(5)
     subject.touch_in(station1)
-    expect { subject.touch_out(station2) }.to change { subject.balance }.by(-Oystercard::FARE_PER_TRIP)
+    expect { subject.touch_out(station2) }.to change { subject.balance }.by(-Journey::FARE_PER_TRIP)
   end
 
   let(:station) { double :station }
@@ -80,7 +80,7 @@ describe Oystercard do
     allow(station).to receive(:name).and_return("Paddington")
     allow(station).to receive(:zone).and_return(1)
     subject.touch_in(station)
-    expect(subject.journeys).to eq([{ in: "Paddington", in_zone: 1, out: "nil", out_zone: "nil" }])
+    expect(subject.journeys_log.last.in.name).to eq("Paddington")
   end
 
   it 'records journeys' do
@@ -89,7 +89,7 @@ describe Oystercard do
     station2 = Station.new("Aldgate", 1)
     subject.touch_in(station1)
     subject.touch_out(station2)
-    expect(subject.journeys).to eq([{ in: "Paddington", in_zone: 1, out: "Aldgate", out_zone: 1 }])
+    expect(subject.journeys_log.last.out.name).to eq("Aldgate")
   end
 
 end

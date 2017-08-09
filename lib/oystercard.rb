@@ -1,19 +1,18 @@
 require_relative './station.rb'
+require_relative './journey.rb'
 
 MIN_BAL = 1
 
 class Oystercard
-  attr_reader :balance, :journeys
+  attr_reader :balance, :journeys_log
   attr_accessor :entry_station, :trip_no
 
   MAXIMUM_LIMIT = 90
-  FARE_PER_TRIP = 1
 
   def initialize(maximum_limit = MAXIMUM_LIMIT)
     @balance = 0
     @maximum_limit = maximum_limit
-    @journeys = []
-    @trip_no = 0
+    @journeys_log = []
   end
 
   def top_up(amount)
@@ -21,44 +20,49 @@ class Oystercard
     @balance += amount
   end
 
+  def in_journey?
+    return 'in use' if touched_in
+    'not in use'
+  end
+
+  def touch_in(station)
+    check_sufficient_fund
+    faulty_touch_in if touched_in
+    @journeys_log << Journey.new(station)
+    puts "Card touched in. Remaining balance #{@balance}."
+  end
+
+  def touch_out(station)
+    @journeys_log << Journey.new(nil) if first_trip || touched_out
+    @journeys_log.last.finish(station)
+    deduct(@journeys_log.last.fare)
+    puts "Card touched out. Remaining balance #{@balance}."
+  end
+
+private
+  def check_sufficient_fund
+    raise "Insufficient funds, min requried balance is #{MIN_BAL}" if @balance < MIN_BAL
+  end
+
+  def faulty_touch_in
+    deduct(Journey::PENALTY_FARE)
+    puts "Penalty of £6 charged because previous journey was not touched out"
+  end
+
+  def first_trip
+    @journeys_log.count.zero?
+  end
+
   def max_error
     raise 'Max balance £90 exceeded'
   end
 
-  def in_journey?
-    return 'not in use' if @journeys == []
-    return 'in use' if touched_in && !touched_out
-    return 'not in use' if last_journey_complete
-  end
-
-  def touch_in(station)
-    raise "You cannot touch in twice" if @trip_no > 0 && (touched_in || !touched_out)
-    @trip_no += 1
-    raise "Insufficient funds, min requried balance is #{MIN_BAL}" if @balance < MIN_BAL
-    puts "Card touched in."
-    @journeys << { in: station.name, in_zone: station.zone, out: "nil", out_zone: "nil" }
-  end
-
-  def touch_out(station)
-    raise "Please touch in first" if touched_out || !touched_in
-    deduct(FARE_PER_TRIP)
-    # @in_use = false
-    puts "Card touched out. Remaining balance #{@balance}."
-    @journeys[trip_no - 1][:out] = station.name
-    @journeys[trip_no - 1][:out_zone] = station.zone
-  end
-
-private
   def touched_in
-    @journeys.last[:in] != "nil"
+    !first_trip && @journeys_log.last.out.nil?
   end
 
   def touched_out
-    @journeys.last[:out] != "nil"
-  end
-
-  def last_journey_complete
-    touched_in && touched_out
+    !first_trip && !@journeys_log.last.in.nil? && !@journeys_log.last.out.nil?
   end
 
   def deduct(amount)
