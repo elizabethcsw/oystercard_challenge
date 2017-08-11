@@ -1,7 +1,7 @@
 {
   "RSpec": {
     "coverage": {
-      "/Users/elizabethchan/Desktop/Makers Academy/week2/oystercard_challenge/spec/journey_spec.rb": [
+      "/Users/stephengeller/Projects/makers-academy/week-two/day-5/oystercard_challenge/spec/journey_spec.rb": [
         1,
         null,
         1,
@@ -60,7 +60,7 @@
         null,
         null
       ],
-      "/Users/elizabethchan/Desktop/Makers Academy/week2/oystercard_challenge/lib/journey.rb": [
+      "/Users/stephengeller/Projects/makers-academy/week-two/day-5/oystercard_challenge/lib/journey.rb": [
         1,
         1,
         1,
@@ -86,27 +86,21 @@
         null,
         null
       ],
-      "/Users/elizabethchan/Desktop/Makers Academy/week2/oystercard_challenge/spec/journeylog_spec.rb": [
+      "/Users/stephengeller/Projects/makers-academy/week-two/day-5/oystercard_challenge/spec/journeylog_spec.rb": [
         1,
         null,
         null,
         1,
         null,
+        6,
         3,
-        3,
-        3,
-        3,
+        6,
+        6,
+        6,
         null,
         1,
-        2,
-        2,
-        null,
-        null,
-        null,
-        1,
-        1,
-        1,
-        1,
+        5,
+        5,
         null,
         null,
         null,
@@ -114,39 +108,79 @@
         1,
         1,
         1,
+        null,
+        null,
+        null,
         1,
+        1,
+        1,
+        null,
+        1,
+        1,
+        1,
+        null,
+        null,
+        null,
+        null,
+        1,
+        1,
+        1,
+        1,
+        null,
+        1,
+        1,
+        1,
+        1,
+        1,
+        null,
+        null,
+        null,
+        1,
+        null,
+        1,
+        1,
+        null,
+        null,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        null,
         null,
         null,
         null
       ],
-      "/Users/elizabethchan/Desktop/Makers Academy/week2/oystercard_challenge/lib/journeylog.rb": [
+      "/Users/stephengeller/Projects/makers-academy/week-two/day-5/oystercard_challenge/lib/journeylog.rb": [
         1,
+        null,
+        1,
+        5,
+        5,
+        null,
+        null,
+        1,
+        4,
+        null,
+        null,
+        1,
+        3,
+        3,
+        null,
         null,
         1,
         2,
-        2,
         null,
         null,
         1,
-        2,
-        null,
-        null,
-        1,
-        1,
-        1,
-        null,
-        null,
-        1,
-        0,
-        null,
-        null,
-        1,
-        1,
+        4,
         null,
         null,
         null
       ],
-      "/Users/elizabethchan/Desktop/Makers Academy/week2/oystercard_challenge/spec/oystercard_spec.rb": [
+      "/Users/stephengeller/Projects/makers-academy/week-two/day-5/oystercard_challenge/spec/oystercard_spec.rb": [
         1,
         1,
         null,
@@ -243,7 +277,7 @@
         null,
         null
       ],
-      "/Users/elizabethchan/Desktop/Makers Academy/week2/oystercard_challenge/lib/oystercard.rb": [
+      "/Users/stephengeller/Projects/makers-academy/week-two/day-5/oystercard_challenge/lib/oystercard.rb": [
         1,
         1,
         null,
@@ -316,7 +350,7 @@
         null,
         null
       ],
-      "/Users/elizabethchan/Desktop/Makers Academy/week2/oystercard_challenge/lib/station.rb": [
+      "/Users/stephengeller/Projects/makers-academy/week-two/day-5/oystercard_challenge/lib/station.rb": [
         1,
         null,
         1,
@@ -327,7 +361,7 @@
         null,
         null
       ],
-      "/Users/elizabethchan/Desktop/Makers Academy/week2/oystercard_challenge/spec/station_spec.rb": [
+      "/Users/stephengeller/Projects/makers-academy/week-two/day-5/oystercard_challenge/spec/station_spec.rb": [
         1,
         null,
         1,
@@ -344,6 +378,6 @@
         null
       ]
     },
-    "timestamp": 1502452918
+    "timestamp": 1502454631
   }
 }
