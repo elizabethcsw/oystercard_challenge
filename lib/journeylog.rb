@@ -1,5 +1,7 @@
 class JourneyLog
 
+
+
   def initialize(journey_class= Journey)
     @journey_class = journey_class
     @log = []
@@ -20,6 +22,10 @@ class JourneyLog
 
   def journeys
     @log.dup
+  end
+
+  def latest_journey
+    @log.last
   end
 
 end
