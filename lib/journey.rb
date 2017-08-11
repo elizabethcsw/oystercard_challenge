@@ -19,6 +19,6 @@ class Journey
   end
 
   def complete?
-    !@in.nil? && !@out.nil?
+    !(@in && @out).nil?
   end
 end
