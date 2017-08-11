@@ -53,7 +53,7 @@ describe JourneyLog do
     end
 
     it 'shows a logged journey' do
-      allow(journey).to receive(:out=).with(station2).and_return(station2)
+      allow(journey).to receive(:out=).and_return(station2)
       allow(journey).to receive(:out).and_return(station2)
       allow(journey).to receive(:complete?).and_return(false)
       subject.start(station1)
