@@ -3,16 +3,15 @@ require 'journeylog'
 
 describe JourneyLog do
 
-  let (:station1) {double :station1}
-  let (:station2) {double :station2}
-  let (:journey) {double :journey}
-  let (:journey_c) {double :journey_c}
-  subject {described_class.new(journey_c)}
+  let(:station1) { double :station1 }
+  let(:station2) { double :station2 }
+  let(:journey) { double :journey }
+  let(:journey_c) { double :journey_c }
+  subject { described_class.new(journey_c) }
 
   before do
     allow(journey).to receive(:in).and_return(station1)
     allow(journey_c).to receive(:new).and_return(journey)
-    # subject.instance_variable_set(:@journey_class.new, journey)
   end
 
   context '#start' do
@@ -31,7 +30,6 @@ describe JourneyLog do
       expect(subject.current_journey).to eq journey
     end
   end
-
 
   context '#finish' do
     before do
@@ -60,6 +58,20 @@ describe JourneyLog do
       subject.finish(station2)
       expect(subject.journeys).to include(journey)
     end
+  end
 
+  context '#latest_journey' do
+    it 'shows nothing by default' do
+      expect(subject.latest_journey).to be_nil
+    end
+
+    it 'shows the latest journey' do
+      allow(journey).to receive(:complete?).and_return(true)
+      allow(journey).to receive(:out).and_return(station2)
+      allow(journey).to receive(:out=).and_return(station2)
+      subject.start(station1)
+      subject.finish(station2)
+      expect(subject.latest_journey).to eq(journey)
+    end
   end
 end

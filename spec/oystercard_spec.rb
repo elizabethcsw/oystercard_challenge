@@ -3,13 +3,12 @@ require 'oystercard'
 describe Oystercard do
 
   let(:station) { double :station }
-  let(:station1) { double :station1, name: "Paddington", zone: 1}
-  let(:station2) { double :station2, name: "Aldgate", zone: 1}
+  let(:station1) { double :station1, name: "Paddington", zone: 1 }
+  let(:station2) { double :station2, name: "Aldgate", zone: 1 }
   let(:journey) { double :journey }
   let(:journeyslog) { double :journeyslog }
 
   before do
-    FARE_PER_TRIP = 1
     subject.instance_variable_set(:@journeys_log, journeyslog)
     allow(journeyslog).to receive_messages(
     :journeys => nil
@@ -39,8 +38,13 @@ describe Oystercard do
   end
 
   context 'before entry' do
+    before do
+      allow(journeyslog).to receive(:start).with(station)
+      allow(journeyslog).to receive(:journeys).and_return([])
+      allow(journeyslog).to receive_message_chain(:latest_journey, :in, :name) { 'Paddington' }
+
+    end
     it 'has a default status of not in use' do
-      # allow(journeyslog).to receive(latest_journey.out).and_return(nil)
       expect(subject.in_journey?).to eq 'not in use'
     end
 
@@ -52,7 +56,6 @@ describe Oystercard do
 
     it 'can record touch in station' do
       subject.top_up(5)
-      # station = Station.new("Paddington")
       allow(station).to receive(:name).and_return("Paddington")
       allow(station).to receive(:zone).and_return(1)
       subject.touch_in(station)
@@ -61,10 +64,15 @@ describe Oystercard do
   end
 
   context 'within entry' do
+    before do
+      allow(journeyslog).to receive_message_chain(:latest_journey, :out)
+      allow(journeyslog).to receive(:start).with(station1)
+      allow(journeyslog).to receive(:journeys).and_return([journey])
+    end
+
     it 'is in journey' do
       expect(subject).to respond_to(:in_journey?)
     end
-
 
     it 'changes its status to in use after touch in' do
       subject.top_up(2)
@@ -73,8 +81,17 @@ describe Oystercard do
     end
   end
 
-
   context 'after touch out' do
+    before do
+      allow(journeyslog).to receive(:journeys).and_return([journey])
+      allow(journeyslog).to receive_message_chain(:latest_journey, :in) { station1 }
+      allow(journeyslog).to receive_message_chain(:latest_journey, :out) { station2 }
+      allow(journeyslog).to receive_message_chain(:latest_journey, :fare) { 2 }
+      allow(journeyslog).to receive_messages(
+                                :start => nil,
+                                :finish => nil,
+                            )
+    end
     it 'will reduce the balance by a specified amount' do
       subject.top_up(20)
       subject.touch_in(station1)
@@ -92,13 +109,11 @@ describe Oystercard do
     it 'can deduct the balance when touching out' do
       subject.top_up(5)
       subject.touch_in(station1)
-      expect { subject.touch_out(station2) }.to change { subject.balance }.by(-FARE_PER_TRIP)
+      expect { subject.touch_out(station2) }.to change { subject.balance }.by(-2)
     end
 
     it 'records journeys' do
       subject.top_up(5)
-      station1 = Station.new("Paddington", 1)
-      station2 = Station.new("Aldgate", 1)
       subject.touch_in(station1)
       subject.touch_out(station2)
       expect(subject.journeys_log.latest_journey.out.name).to eq("Aldgate")

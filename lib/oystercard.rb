@@ -22,6 +22,7 @@ class Oystercard
   end
 
   def in_journey?
+    puts "#{touched_in} is touched in"
     return 'in use' if touched_in
     'not in use'
   end

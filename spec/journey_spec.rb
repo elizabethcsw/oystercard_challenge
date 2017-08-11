@@ -11,8 +11,8 @@ describe Journey do
   end
 
   context 'upon exit, if an exit station is given' do
-    let(:station1) { double :station, zone: 1}
-    let(:station2) { double :station, zone: 2, name: "Paddington", test: "what"}
+    let(:station1) { double :station, zone: 1 }
+    let(:station2) { double :station, zone: 2, name: "Paddington", test: "what" }
     subject { described_class.new(station1) }
 
     before(:each) do
@@ -39,7 +39,7 @@ describe Journey do
   end
 
   context 'upon exit, if no entry station is given' do
-    let(:station1) { double "station"}
+    let(:station1) { double "station" }
     # the thing after double does not matter, whether it is "station" or :station
 
     before(:each) do

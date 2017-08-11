@@ -4,7 +4,7 @@ class Journey
 
   attr_accessor :in, :out
 
-  def initialize(in_station=nil)
+  def initialize(in_station = nil)
     @in = in_station
     @out = nil
   end
