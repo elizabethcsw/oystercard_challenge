@@ -22,7 +22,6 @@ class Oystercard
   end
 
   def in_journey?
-    puts "#{touched_in} is touched in"
     return 'in use' if touched_in
     'not in use'
   end
@@ -30,7 +29,6 @@ class Oystercard
   def touch_in(station)
     check_sufficient_fund
     faulty_touch_in if touched_in
-    # @journeys_log << Journey.new(station)
     @journeys_log.start(station)
     "Card touched in. Remaining balance #{@balance}."
   end
